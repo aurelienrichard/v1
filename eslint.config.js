@@ -1,32 +1,48 @@
-import eslint from '@eslint/js';
-import prettier from 'eslint-config-prettier';
-import svelte from 'eslint-plugin-svelte';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import js from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import svelte from 'eslint-plugin-svelte'
+import globals from 'globals'
+import ts from 'typescript-eslint'
 
-export default tseslint.config(
-	eslint.configs.recommended,
-	...tseslint.configs.recommended,
-	...svelte.configs['flat/recommended'],
-	prettier,
-	...svelte.configs['flat/prettier'],
+export default ts.config(
+	// ignores
+	{ ignores: ['build/', '.svelte-kit/', 'dist/', '*.config.js'] },
+	// js
+	js.configs.recommended,
+	// ts
+	...ts.configs.strictTypeChecked,
+	...ts.configs.stylisticTypeChecked,
+	{
+		rules: {
+			eqeqeq: ['error', 'smart'],
+			'@typescript-eslint/no-use-before-define': ['error', { functions: false }],
+			'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '_' }]
+		}
+	},
 	{
 		languageOptions: {
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: import.meta.dirname
+			},
 			globals: {
 				...globals.browser,
 				...globals.node
 			}
 		}
 	},
+	// svelte
+	...svelte.configs['flat/recommended'],
 	{
 		files: ['**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
-				parser: tseslint.parser
+				extraFileExtensions: ['.svelte'],
+				parser: ts.parser
 			}
 		}
 	},
-	{
-		ignores: ['build/', '.svelte-kit/', 'dist/']
-	}
-);
+	// prettier
+	prettier,
+	...svelte.configs['flat/prettier']
+)
