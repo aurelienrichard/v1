@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { T } from '@threlte/core'
 	import { RoundedBoxGeometry } from '@threlte/extras'
-	import { Vector3, type Texture } from 'three'
+	import { Vector3 } from 'three'
 
 	interface Props {
-		matcap: Texture
 		position: Vector3
 	}
 
-	let { matcap, position }: Props = $props()
+	let { position }: Props = $props()
 </script>
 
 <T.Mesh position={position.toArray()}>
 	<RoundedBoxGeometry args={[1, 1, 1]} />
-	<T.MeshMatcapMaterial {matcap} />
+	<T.MeshBasicMaterial color="#000" opacity={0.5} transparent />
 </T.Mesh>
