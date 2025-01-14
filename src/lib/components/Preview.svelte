@@ -11,6 +11,6 @@
 </script>
 
 <T.Mesh position={position.toArray()}>
-	<RoundedBoxGeometry args={[1, 1, 1]} />
+	<RoundedBoxGeometry args={[50, 50, 50]} />
 	<T.MeshBasicMaterial color="#000" opacity={0.5} transparent />
 </T.Mesh>
