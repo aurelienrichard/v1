@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { T } from '@threlte/core'
 	import { RoundedBoxGeometry } from '@threlte/extras'
-	import { Vector3, type Texture } from 'three'
+	import type { Texture, Mesh } from 'three'
 
 	interface Props {
 		matcap: Texture
-		position: Vector3
+		position: [number, number, number]
+		oncreate: (ref: Mesh) => void
 	}
 
-	let { matcap, position }: Props = $props()
+	let { matcap, position, oncreate }: Props = $props()
 </script>
 
-<T.Mesh position={position.toArray()}>
+<T.Mesh {position} {oncreate}>
 	<RoundedBoxGeometry args={[50, 50, 50]} />
 	<T.MeshMatcapMaterial {matcap} />
 </T.Mesh>
