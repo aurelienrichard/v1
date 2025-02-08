@@ -40,8 +40,6 @@
 			.multiplyScalar(50)
 			.addScalar(25)
 
-		newPreviewPosition.y = Math.max(25, newPreviewPosition.y)
-
 		previewPosition = newPreviewPosition.toArray()
 	}
 
@@ -67,8 +65,6 @@
 			.floor()
 			.multiplyScalar(50)
 			.addScalar(25)
-
-		newBlockPosition.y = Math.max(25, newBlockPosition.y)
 
 		blockPositions.push(newBlockPosition.toArray())
 	}
@@ -103,6 +99,7 @@
 
 <Preview position={previewPosition} />
 
+<!-- Blocks -->
 {#await textures then matcaps}
 	{#each blockPositions as position}
 		<Block
