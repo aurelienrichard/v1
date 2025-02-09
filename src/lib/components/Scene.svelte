@@ -56,13 +56,10 @@
 		previewPosition = newPreviewPosition.toArray()
 	}
 
-	const onpointerdown = (event: PointerEvent) => {
-		const newBlockPosition = calculateNewPosition(event)
-		if (!newBlockPosition) return
+	const onpointerdown = () => {
+		if (overlapsBlockPosition(new Vector3(...previewPosition), blockPositions)) return
 
-		if (overlapsBlockPosition(newBlockPosition, blockPositions)) return
-
-		blockPositions.push(newBlockPosition.toArray())
+		blockPositions.push(previewPosition)
 	}
 </script>
 
