@@ -13,6 +13,6 @@
 </script>
 
 <T.Mesh {position} {oncreate}>
-	<RoundedBoxGeometry args={[50, 50, 50]} />
+	<RoundedBoxGeometry args={[1, 1, 1]} />
 	<T.MeshMatcapMaterial {matcap} />
 </T.Mesh>

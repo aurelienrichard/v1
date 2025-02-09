@@ -3,11 +3,9 @@
 	import Block from '$lib/components/Block.svelte'
 	import Preview from '$lib/components/Preview.svelte'
 	import { useTexture } from '@threlte/extras'
-	import { texturePaths, getRandomArrayValue } from '$lib/utils'
+	import { texturePaths, getRandomArrayValue, overlapsBlockPosition } from '$lib/utils'
+	import type { xyzCoordinates, xyCoordinates } from '$lib/types'
 	import { PerspectiveCamera, Raycaster, Vector2, Vector3, type Mesh } from 'three'
-
-	type xyzCoordinates = [number, number, number]
-	type xyCoordinates = [number, number]
 
 	const textures = useTexture(texturePaths)
 	let previewPosition = $state<xyzCoordinates>([0, 0, 0])
@@ -35,10 +33,13 @@
 
 		const newPreviewPosition = new Vector3()
 			.copy(intersect.point)
-			.divideScalar(50)
-			.floor()
-			.multiplyScalar(50)
-			.addScalar(25)
+			.divideScalar(1)
+			.round()
+			.multiplyScalar(1)
+			.addScalar(0.5)
+			.min(new Vector3(5.5, 5.5, 5.5))
+
+		if (overlapsBlockPosition(newPreviewPosition, blockPositions)) return
 
 		previewPosition = newPreviewPosition.toArray()
 	}
@@ -61,10 +62,16 @@
 
 		const newBlockPosition = new Vector3()
 			.copy(intersect.point)
-			.divideScalar(50)
-			.floor()
-			.multiplyScalar(50)
-			.addScalar(25)
+			.divideScalar(1)
+			.round()
+			.multiplyScalar(1)
+			.addScalar(0.5)
+			.min(new Vector3(5.5, 5.5, 5.5))
+
+		newBlockPosition.x = Math.min(5.5, newBlockPosition.x)
+		newBlockPosition.z = Math.min(5.5, newBlockPosition.z)
+
+		if (overlapsBlockPosition(newBlockPosition, blockPositions)) return
 
 		blockPositions.push(newBlockPosition.toArray())
 	}
@@ -76,9 +83,7 @@
 	bind:ref={camera}
 	makeDefault
 	fov={45}
-	position={[200, 400, 800]}
-	near={1}
-	far={10000}
+	position={[4, 8, 16]}
 	oncreate={(ref) => {
 		ref.lookAt(0, 0, 0)
 	}}
@@ -86,14 +91,14 @@
 <T.Raycaster bind:ref={raycaster} />
 
 <!-- Grid -->
-<T.GridHelper args={[600, 12]} />
+<T.GridHelper args={[12, 12]} />
 <T.Mesh
 	rotation.x={-Math.PI / 2}
 	oncreate={(ref) => {
 		collidableObjects.push(ref)
 	}}
 >
-	<T.PlaneGeometry args={[600, 600]} />
+	<T.PlaneGeometry args={[12, 12]} />
 	<T.MeshBasicMaterial visible={false} />
 </T.Mesh>
 

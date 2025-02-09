@@ -10,6 +10,6 @@
 </script>
 
 <T.Mesh {position}>
-	<RoundedBoxGeometry args={[50, 50, 50]} />
+	<RoundedBoxGeometry args={[1, 1, 1]} />
 	<T.MeshBasicMaterial color="#000" opacity={0.5} transparent />
 </T.Mesh>
