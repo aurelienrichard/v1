@@ -15,29 +15,41 @@
 	let raycaster = $state<Raycaster>()
 	let collidableObjects = $state<Mesh[]>([])
 
-	const onpointermove = (event: PointerEvent) => {
-		if (!camera || !raycaster) return
-
+	const updatePointer = (event: PointerEvent) => {
 		pointer = [
 			(event.clientX / window.innerWidth) * 2 - 1,
 			-(event.clientY / window.innerHeight) * 2 + 1
 		]
+	}
 
+	const getIntersect = (event: PointerEvent) => {
+		if (!camera || !raycaster) return undefined
+
+		updatePointer(event)
 		raycaster.setFromCamera(new Vector2(...pointer), camera)
+		const [intersect] = raycaster.intersectObjects(collidableObjects, false)
 
-		const intersects = raycaster.intersectObjects(collidableObjects, false)
-		if (intersects.length === 0) return
+		return intersect
+	}
 
-		const [intersect] = intersects
-		if (!intersect) return
+	const calculateNewPosition = (event: PointerEvent) => {
+		const intersect = getIntersect(event)
+		if (!intersect) return undefined
 
-		const newPreviewPosition = new Vector3()
+		const newPosition = new Vector3()
 			.copy(intersect.point)
 			.divideScalar(1)
 			.round()
 			.multiplyScalar(1)
 			.addScalar(0.5)
 			.min(new Vector3(5.5, 5.5, 5.5))
+
+		return newPosition
+	}
+
+	const onpointermove = (event: PointerEvent) => {
+		const newPreviewPosition = calculateNewPosition(event)
+		if (!newPreviewPosition) return
 
 		if (overlapsBlockPosition(newPreviewPosition, blockPositions)) return
 
@@ -45,31 +57,8 @@
 	}
 
 	const onpointerdown = (event: PointerEvent) => {
-		if (!camera || !raycaster) return
-
-		pointer = [
-			(event.clientX / window.innerWidth) * 2 - 1,
-			-(event.clientY / window.innerHeight) * 2 + 1
-		]
-
-		raycaster.setFromCamera(new Vector2(...pointer), camera)
-
-		const intersects = raycaster.intersectObjects(collidableObjects, false)
-		if (intersects.length === 0) return
-
-		const [intersect] = intersects
-		if (!intersect) return
-
-		const newBlockPosition = new Vector3()
-			.copy(intersect.point)
-			.divideScalar(1)
-			.round()
-			.multiplyScalar(1)
-			.addScalar(0.5)
-			.min(new Vector3(5.5, 5.5, 5.5))
-
-		newBlockPosition.x = Math.min(5.5, newBlockPosition.x)
-		newBlockPosition.z = Math.min(5.5, newBlockPosition.z)
+		const newBlockPosition = calculateNewPosition(event)
+		if (!newBlockPosition) return
 
 		if (overlapsBlockPosition(newBlockPosition, blockPositions)) return
 

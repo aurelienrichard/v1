@@ -11,5 +11,5 @@
 
 <T.Mesh {position}>
 	<RoundedBoxGeometry args={[1, 1, 1]} />
-	<T.MeshBasicMaterial color="#000" opacity={0.5} transparent />
+	<T.MeshBasicMaterial color="#fff" opacity={0.8} transparent />
 </T.Mesh>
