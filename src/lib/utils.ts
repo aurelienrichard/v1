@@ -7,7 +7,9 @@ export const texturePaths = [
 	'/textures/3.png',
 	'/textures/4.png',
 	'/textures/5.png',
-	'/textures/6.png'
+	'/textures/6.png',
+	'/textures/7.png',
+	'/textures/8.png'
 ]
 
 export const getRandomArrayValue = <T>(array: T[]): T => {

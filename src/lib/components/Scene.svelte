@@ -8,7 +8,7 @@
 	import { PerspectiveCamera, Raycaster, Vector2, Vector3, type Mesh } from 'three'
 
 	const textures = useTexture(texturePaths)
-	let previewPosition = $state<xyzCoordinates>([0.5, 0.5, 0.5])
+	let previewPosition = $state<xyzCoordinates>([0, 0.5, 0])
 	let blockPositions = $state<xyzCoordinates[]>([])
 	let pointer = $state<xyCoordinates>([0, 0])
 	let camera = $state<PerspectiveCamera>()
@@ -69,7 +69,7 @@
 	bind:ref={camera}
 	makeDefault
 	fov={45}
-	position={[4, 8, 16]}
+	position={[8, 12, 16]}
 	oncreate={(ref) => {
 		ref.lookAt(0, 0, 0)
 	}}
