@@ -8,7 +8,7 @@
 	import { PerspectiveCamera, Raycaster, Vector2, Vector3, type Mesh } from 'three'
 
 	const textures = useTexture(texturePaths)
-	let previewPosition = $state<xyzCoordinates>([0, 0.5, 0])
+	let previewPosition = $state<xyzCoordinates>([0.5, 0.5, 0.5])
 	let blockPositions = $state<xyzCoordinates[]>([])
 	let pointer = $state<xyCoordinates>([0, 0])
 	let camera = $state<PerspectiveCamera>()
@@ -56,14 +56,14 @@
 		previewPosition = newPreviewPosition.toArray()
 	}
 
-	const ondblclick = () => {
+	const onpointerup = () => {
 		if (overlapsBlockPosition(new Vector3(...previewPosition), blockPositions)) return
 
 		blockPositions.push(previewPosition)
 	}
 </script>
 
-<svelte:window {onpointermove} {ondblclick} />
+<svelte:window {onpointermove} {onpointerup} />
 
 <T.PerspectiveCamera
 	bind:ref={camera}
